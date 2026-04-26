@@ -236,7 +236,8 @@
     // ၂။ မျက်နှာပြင်မှာ ပြချင်တဲ့ နာမည်အလှလေးများ (Mapping)
     const customDisplayNames = {
         "ပဉှာဝါရ": "ပဋ္ဌာန်း - ပဉှာဝါရ",
-        "ပစ္စယုဒ္ဒေသ -တိကပဋ္ဌာန်း": "ပစ္စယုဒ္ဒေသ (တိကပဋ္ဌာန်း)"
+        "ပစ္စယုဒ္ဒေသ -တိကပဋ္ဌာန်း": "ပစ္စယုဒ္ဒေသ (တိကပဋ္ဌာန်း)",
+        "စာရေးသူ:အရှင်ဇနကာဘိဝံသ": "အရှင်ဇနကာဘိဝံသ - တရားစာအုပ်များ"
     };
 
     let currentActiveTitle = "";
@@ -269,7 +270,6 @@
             }
         }
     });
-
     // App Initialization (Sidebar Menu ပြတဲ့နေရာ)
     window.onload = () => {
         const menu = document.getElementById('menu-list');
@@ -292,7 +292,6 @@
             currentActiveTitle = "";
         }
     };
-
     // Wiki Loading logic (ခေါင်းစဉ်ပြတဲ့နေရာမှာ နာမည်အလှ သုံးထားပါတယ်)
     async function loadWiki(title, push = true) {
         currentActiveTitle = title;
@@ -330,7 +329,6 @@
             if(!cached) cBox.innerHTML = "<p style='text-align:center;'>အင်တာနက် ဖွင့်ပါခင်ဗျာ။</p>";
         }
     }
-
     // Bookmark ပြတဲ့နေရာမှာလည်း နာမည်အလှပြမယ်
     function renderBookmarks() {
         const bl = document.getElementById('bookmark-list');
@@ -360,7 +358,7 @@
     function saveThisPage() {
         if(!currentActiveTitle) return;
         let b = JSON.parse(localStorage.getItem('favs') || "[]");
-        if(!b.includes(currentActiveTitle)) { b.push(currentActiveTitle); localStorage.setItem('favs', JSON.stringify(b)); renderBookmarks(); alert("မှတ်သားပြီးပါပြီ"); }
+        if(!b.includes(currentActiveTitle)) { b.push(currentActiveTitle); localStorage.setItem('favs', JSON.stringify(b)); renderBookmarks(); alert("သိမ်းပြီးပါပြီ"); }
     }
     function removeMark(e, t) {
         e.stopPropagation();
