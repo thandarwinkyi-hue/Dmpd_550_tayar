@@ -209,30 +209,36 @@
 </main>
 
 <script>
-    // ခေါင်းစဉ်များ ထပ်တိုးရန် ဤနေရာတွင် ပြင်ပါ
+    // ၁။ မူလ Wikisource ခေါင်းစဉ်များ (Link မပျက်စေရန်)
     const myLinks = [
-"ပုံတော်စုံ ငါးရာငါးဆယ် ဇာတ်ဝတ္ထု",
-"ဓမ္မပဒဝတ္ထုတော်ကြီး",
-"ဓမ္မပဒဂါထာနိဿယ",
-"ဓမ္မပဒဝတ္ထုတော်ကြီး (ပဌမတွဲ)",
-"ဓမ္မပဒဝတ္ထုတော်ကြီး (ဒုတိယတွဲ)",
-"သရုပ်ပြဓမ္မပဒကျမ်း/သရုပ်ပြဓမ္မပဒကျမ်း နိဒါန်း",
-"သရုပ်ပြဓမ္မပဒကျမ်း",
-"စာရေးသူ:အရှင်ဇနကာဘိဝံသ",
-"ဗုဒ္ဓဘာသာကောင်းတစ်ယောက်",
-"ဗုဒ္ဓဘာသာကောင်းတစ်ယောက်-ဒု",
-"ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ပထမတွဲ",
-"ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ပထမတွဲ-ဒု",
-"ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ဒုတိယတွဲ",
-"ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ဒုတိယတွဲ-ဒု",
-"ပါဠိဖတ်နည်း",
-"ပရိတ်ကြီး နိဿယသစ်",
-"ပရိတ်ကြီးနိဿယသစ်",
-"ပရိတ်ကြီးနိဿယသစ်-ဒု",
-"ပစ္စယုဒ္ဒေသ -တိကပဋ္ဌာန်း",
-"ပဉှာဝါရ"
-        ];
-        
+        "ပုံတော်စုံ ငါးရာငါးဆယ် ဇာတ်ဝတ္ထု",
+        "ဓမ္မပဒဝတ္ထုတော်ကြီး",
+        "ဓမ္မပဒဂါထာနိဿယ",
+        "ဓမ္မပဒဝတ္ထုတော်ကြီး (ပဌမတွဲ)",
+        "ဓမ္မပဒဝတ္ထုတော်ကြီး (ဒုတိယတွဲ)",
+        "သရုပ်ပြဓမ္မပဒကျမ်း/သရုပ်ပြဓမ္မပဒကျမ်း နိဒါန်း",
+        "သရုပ်ပြဓမ္မပဒကျမ်း",
+        "စာရေးသူ:အရှင်ဇနကာဘိဝံသ",
+        "ဗုဒ္ဓဘာသာကောင်းတစ်ယောက်",
+        "ဗုဒ္ဓဘာသာကောင်းတစ်ယောက်-ဒု",
+        "ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ပထမတွဲ",
+        "ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ပထမတွဲ-ဒု",
+        "ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ဒုတိယတွဲ",
+        "ဗုဒ္ဓဘာသာလက်စွဲကျမ်း ဒုတိယတွဲ-ဒု",
+        "ပါဠိဖတ်နည်း",
+        "ပရိတ်ကြီး နိဿယသစ်",
+        "ပရိတ်ကြီးနိဿယသစ်",
+        "ပရိတ်ကြီးနိဿယသစ်-ဒု",
+        "ပစ္စယုဒ္ဒေသ -တိကပဋ္ဌာန်း",
+        "ပဉှာဝါရ"
+    ];
+
+    // ၂။ မျက်နှာပြင်မှာ ပြချင်တဲ့ နာမည်အလှလေးများ (Mapping)
+    const customDisplayNames = {
+        "ပဉှာဝါရ": "ပဋ္ဌာန်း - ပဉှာဝါရ",
+        "ပစ္စယုဒ္ဒေသ -တိကပဋ္ဌာန်း": "ပစ္စယုဒ္ဒေသ (တိကပဋ္ဌာန်း)"
+    };
+
     let currentActiveTitle = "";
     let fontSize = 20;
 
@@ -251,183 +257,118 @@
         document.getElementById('content').style.fontSize = fontSize + 'px';
     }
 
-    // --- အရေးကြီးသောအဆင့် (File Not Found မဖြစ်စေရန်) ---
     // Link များကို ကြားဖြတ်ဖမ်းယူခြင်း
     document.getElementById('content').addEventListener('click', function(e) {
         const link = e.target.closest('a');
         if (link) {
             const href = link.getAttribute('href');
-            // '/wiki/' ပါတဲ့ link တွေဆိုရင် ရှေ့ဆက်မသွားအောင် တားမယ်
             if (href && href.startsWith('/wiki/')) {
                 e.preventDefault(); 
-                // ခေါင်းစဉ်ကိုပဲ ယူပြီး App ထဲမှာ ပြန်ဖွင့်မယ်
                 const newTitle = decodeURIComponent(href.replace('/wiki/', ''));
                 loadWiki(newTitle);
             }
         }
     });
 
-    // App Initialization
+    // App Initialization (Sidebar Menu ပြတဲ့နေရာ)
     window.onload = () => {
         const menu = document.getElementById('menu-list');
         myLinks.forEach(t => {
             let li = document.createElement('li');
-            li.innerText = t;
+            // Mapping ရှိရင် နာမည်အလှကို သုံးမယ်၊ မရှိရင် မူလနာမည်ကို သုံးမယ်
+            li.innerText = customDisplayNames[t] || t;
             li.onclick = () => { loadWiki(t); closeSidebar(); };
             menu.appendChild(li);
         });
         renderBookmarks();
     };
-// Back Button နှိပ်လိုက်ရင် နောက်ပြန်စာမျက်နှာကို ပြန်ဖွင့်ပေးမယ့် Logic
-window.onpopstate = function(event) {
-    if (event.state && event.state.title) {
-        // နောက်ပြန်သွားစရာ history ရှိရင် အဲဒီ title ကို ပြန် load လုပ်မယ်
-        // push = false လို့ ပေးထားတာက history ထဲကို ထပ်မထည့်ဖို့ပါ
-        loadWiki(event.state.title, false);
-    } else {
-        // history မရှိတော့ရင် မူလစာမျက်နှာကို ပြန်ပြမယ်
-        document.getElementById('title-display').innerText = "ဓမ္မအသိတိုးပွားပါစေ🙏🙏🙏";
-        document.getElementById('content').innerHTML = "မာတိကာမှ ဖတ်လိုသော အကြောင်းအရာကို ရွေးချယ်ပါ။";
-        currentActiveTitle = "";
-    }
-};
 
-    // Wiki Loading with Offline Cache Logic
-    // loadWiki function ကို ဒီလို ပြင်လိုက်ပါ
-async function loadWiki(title, push = true) { // push parameter အသစ် ထည့်ထားပါတယ်
-    currentActiveTitle = title;
-    document.getElementById('title-display').innerText = title;
-    const cBox = document.getElementById('content');
-    
-    // စာမျက်နှာအသစ်သွားတိုင်း History ထဲကို Title ထည့်ပေးမယ်
-    if (push) {
-        history.pushState({ title: title }, title, "#" + encodeURIComponent(title));
-    }
+    window.onpopstate = function(event) {
+        if (event.state && event.state.title) {
+            loadWiki(event.state.title, false);
+        } else {
+            document.getElementById('title-display').innerText = "ဓမ္မအသိတိုးပွားပါစေ🙏🙏🙏";
+            document.getElementById('content').innerHTML = "မာတိကာမှ ဖတ်လိုသော အကြောင်းအရာကို ရွေးချယ်ပါ။";
+            currentActiveTitle = "";
+        }
+    };
 
-    // ၁။ Offline Storage စစ်ဆေးခြင်း
-    const cached = localStorage.getItem('cache_' + title);
-    if (cached) {
-        cBox.innerHTML = cached;
-        document.getElementById('main-content').scrollTop = 0;
-    } else {
-        cBox.innerHTML = "<p style='text-align:center;'>ခဏစောင့်ပါခင်ဗျာ ...</p>";
-    }
+    // Wiki Loading logic (ခေါင်းစဉ်ပြတဲ့နေရာမှာ နာမည်အလှ သုံးထားပါတယ်)
+    async function loadWiki(title, push = true) {
+        currentActiveTitle = title;
+        // Screen ပေါ်မှာ နာမည်အလှပြမယ်
+        document.getElementById('title-display').innerText = customDisplayNames[title] || title;
+        
+        const cBox = document.getElementById('content');
+        if (push) {
+            history.pushState({ title: title }, title, "#" + encodeURIComponent(title));
+        }
 
-    const api = `https://my.wikisource.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&format=json&origin=*&prop=text`;
-    
-    try {
-        const res = await fetch(api);
-        const data = await res.json();
-        if(data.parse) {
-            const p = new DOMParser();
-            const d = p.parseFromString(data.parse.text['*'], 'text/html');
-            d.querySelectorAll('table, .mw-editsection, .ws-header, .headerContainer').forEach(el => el.remove());
-            const cleanHtml = d.body.innerHTML;
-            cBox.innerHTML = cleanHtml;
-            localStorage.setItem('cache_' + title, cleanHtml); 
+        const cached = localStorage.getItem('cache_' + title);
+        if (cached) {
+            cBox.innerHTML = cached;
             document.getElementById('main-content').scrollTop = 0;
+        } else {
+            cBox.innerHTML = "<p style='text-align:center;'>ခဏစောင့်ပါခင်ဗျာ ...</p>";
         }
-    } catch(e) {
-        if(!cached) cBox.innerHTML = "<p style='text-align:center;'>အင်တာနက် ဖွင့်ပါခင်ဗျာ။</p>";
-    }
-}
-  
-    function exportPDF() {
-    // ၁။ ယာယီ Iframe တစ်ခု ဆောက်မယ်
-    const printFrame = document.createElement('iframe');
-    printFrame.style.position = 'fixed';
-    printFrame.style.right = '0';
-    printFrame.style.bottom = '0';
-    printFrame.style.width = '0';
-    printFrame.style.height = '0';
-    printFrame.style.border = '0';
-    document.body.appendChild(printFrame);
 
-    // ၂။ Reader Card ထဲက စာသားတွေကို ကူးယူမယ်
-    const content = document.getElementById('reader-card').innerHTML;
-    const title = document.getElementById('title-display').innerText;
-
-    // ၃။ Iframe ထဲကို စာသားနဲ့ CSS တွေ ထည့်မယ်
-    const frameDoc = printFrame.contentWindow.document;
-    frameDoc.open();
-    frameDoc.write(`
-        <html>
-            <head>
-                <title>${title}</title>
-                <style>
-                    body { font-family: 'Pyidaungsu', 'Sagar', sans-serif; padding: 20px; line-height: 1.6; }
-                    h2 { text-align: center; color: #333; }
-                    hr { border: 0; border-top: 1px solid #eee; }
-                    /* Print ထုတ်တဲ့အခါ ပုံစံကျအောင် */
-                    @page { margin: 20mm; }
-                </style>
-            </head>
-            <body>
-                <h2>${title}</h2>
-                <hr>
-                <div>${content}</div>
-                <script>
-                    // စာမျက်နှာ အားလုံး load ဖြစ်ပြီးတာနဲ့ Print ခေါ်မယ်
-                    window.onload = function() { 
-                        window.print(); 
-                        // ပရင့်ပိတ်သွားရင် Iframe ကို ပြန်ဖျက်မယ်
-                        setTimeout(() => { window.frameElement.remove(); }, 100);
-                    };
-                <\/script>
-            </body>
-        </html>
-    `);
-    frameDoc.close();
-}
-    // Bookmarks Logic
-    function saveThisPage() {
-        if(!currentActiveTitle) return;
-        let b = JSON.parse(localStorage.getItem('favs') || "[]");
-        if(!b.includes(currentActiveTitle)) {
-            b.push(currentActiveTitle);
-            localStorage.setItem('favs', JSON.stringify(b));
-            renderBookmarks();
-            alert("မှတ်သားပြီးပါပြီ");
+        const api = `https://my.wikisource.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&format=json&origin=*&prop=text`;
+        
+        try {
+            const res = await fetch(api);
+            const data = await res.json();
+            if(data.parse) {
+                const p = new DOMParser();
+                const d = p.parseFromString(data.parse.text['*'], 'text/html');
+                d.querySelectorAll('table, .mw-editsection, .ws-header, .headerContainer').forEach(el => el.remove());
+                const cleanHtml = d.body.innerHTML;
+                cBox.innerHTML = cleanHtml;
+                localStorage.setItem('cache_' + title, cleanHtml); 
+                document.getElementById('main-content').scrollTop = 0;
+            }
+        } catch(e) {
+            if(!cached) cBox.innerHTML = "<p style='text-align:center;'>အင်တာနက် ဖွင့်ပါခင်ဗျာ။</p>";
         }
     }
+
+    // Bookmark ပြတဲ့နေရာမှာလည်း နာမည်အလှပြမယ်
     function renderBookmarks() {
         const bl = document.getElementById('bookmark-list');
         bl.innerHTML = "";
         let b = JSON.parse(localStorage.getItem('favs') || "[]");
         b.forEach(t => {
             let li = document.createElement('li');
-            li.innerHTML = `<span>${t}</span><span class="del-mark" onclick="removeMark(event, '${t}')">✕</span>`;
+            let display = customDisplayNames[t] || t;
+            li.innerHTML = `<span>${display}</span><span class="del-mark" onclick="removeMark(event, '${t}')">✕</span>`;
             li.onclick = () => { loadWiki(t); closeSidebar(); };
             bl.appendChild(li);
         });
     }
 
+    // ကျန်တဲ့ functions များ (exportPDF, saveThisPage, removeMark, goBack) ကို အရင်အတိုင်း ထားနိုင်ပါတယ်
+    function exportPDF() {
+        const printFrame = document.createElement('iframe');
+        printFrame.style.position = 'fixed'; printFrame.style.width = '0'; printFrame.style.height = '0'; printFrame.style.border = '0';
+        document.body.appendChild(printFrame);
+        const content = document.getElementById('reader-card').innerHTML;
+        const title = document.getElementById('title-display').innerText;
+        const frameDoc = printFrame.contentWindow.document;
+        frameDoc.open();
+        frameDoc.write(`<html><head><title>${title}</title><style>body { font-family: 'Pyidaungsu', sans-serif; padding: 20px; line-height: 1.6; } h2 { text-align: center; } hr { border-top: 1px solid #eee; }</style></head><body><h2>${title}</h2><hr><div>${content}</div><script>window.onload = function() { window.print(); setTimeout(() => { window.frameElement.remove(); }, 100); };<\/script></body></html>`);
+        frameDoc.close();
+    }
+    function saveThisPage() {
+        if(!currentActiveTitle) return;
+        let b = JSON.parse(localStorage.getItem('favs') || "[]");
+        if(!b.includes(currentActiveTitle)) { b.push(currentActiveTitle); localStorage.setItem('favs', JSON.stringify(b)); renderBookmarks(); alert("မှတ်သားပြီးပါပြီ"); }
+    }
     function removeMark(e, t) {
         e.stopPropagation();
         let b = JSON.parse(localStorage.getItem('favs') || "[]");
         localStorage.setItem('favs', JSON.stringify(b.filter(x => x !== t)));
         renderBookmarks();
     }
-    function printNow() {
-    // Median (GoNative) အတွက် Native Print Command
-    if (navigator.userAgent.indexOf('GoNative') > -1) {
-        window.location.href = 'gonative://print/printPage';
-    } else {
-        window.print();
-    }
-}
-    function goBack() {
-    // browser history ထဲမှာ နောက်ပြန်သွားစရာရှိရင် သွားမယ်
-    // history.back() က popstate event ကို trigger လုပ်ပါလိမ့်မယ်
-    if (window.history.state) {
-        window.history.back();
-    } else {
-        // အကယ်၍ မာတိကာ စာမျက်နှာမှာပဲ ရောက်နေရင်တော့ App ကို ပိတ်ခိုင်းလို့ရပါတယ်
-        // Median မှာဆိုရင် exit command သုံးလို့ရနိုင်ပါတယ်
-        alert("ထွက်ခွာရန် Back ခလုတ်ကို ထပ်နှိပ်ပါ");
-    }
-}
+    function goBack() { if (window.history.state) { window.history.back(); } else { alert("ထွက်ခွာရန် Back ခလုတ်ကို ထပ်နှိပ်ပါ"); } }
 </script>
-
 </body>
 </html>
